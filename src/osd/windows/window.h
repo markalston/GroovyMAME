@@ -50,6 +50,8 @@ enum class win_window_focus
 };
 
 
+class display_manager;
+
 class win_window_info  : public osd_window_t<HWND>
 {
 public:
@@ -134,6 +136,7 @@ private:
 	void maximize_window();
 	void adjust_window_position_after_major_change();
 	void set_fullscreen(int fullscreen);
+	void reset_fullscreen_renderer();
 
 	static POINT        s_saved_cursor_pos;
 
@@ -142,6 +145,8 @@ private:
 #endif
 
 	bool                m_attached_mode;
+
+	display_manager *   m_display_manager = 0;
 };
 
 struct osd_draw_callbacks

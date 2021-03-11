@@ -59,7 +59,6 @@ const options_entry osd_options::s_option_entries[] =
 	{ OSDOPTION_WINDOW ";w",                  "0",              OPTION_BOOLEAN,   "enable window mode; otherwise, full screen mode is assumed" },
 	{ OSDOPTION_MAXIMIZE ";max",              "1",              OPTION_BOOLEAN,   "default to maximized windows" },
 	{ OSDOPTION_WAITVSYNC ";vs",              "0",              OPTION_BOOLEAN,   "enable waiting for the start of VBLANK before flipping screens (reduces tearing effects)" },
-	{ OSDOPTION_SYNCREFRESH ";srf",           "0",              OPTION_BOOLEAN,   "enable using the start of VBLANK for throttling instead of the game time" },
 	{ OSD_MONITOR_PROVIDER,                   OSDOPTVAL_AUTO,   OPTION_STRING,    "monitor discovery method: " },
 
 	// per-window options
@@ -91,10 +90,42 @@ const options_entry osd_options::s_option_entries[] =
 
 	// full screen options
 	{ nullptr,                                nullptr,          OPTION_HEADER,    "OSD FULL SCREEN OPTIONS" },
-	{ OSDOPTION_SWITCHRES,                    "0",              OPTION_BOOLEAN,   "enable resolution switching" },
+	{ OSDOPTION_SWITCHRES,                    "1",              OPTION_BOOLEAN,   "enable resolution switching" },
+	{ OSDOPTION_SWITCHRES_BACKEND,            "auto",           OPTION_STRING,    "Switchres backend to use (adl, ati, powerstrip, xrandr, drmkms)" },
+	{ OSDOPTION_MODE_SETTING,                 "0",              OPTION_BOOLEAN,   "force resolution switching through Switchres backend" },
+	{ OSDOPTION_MODELINE_GENERATION ";ml",    "1",              OPTION_BOOLEAN,   "Automatic generation of modelines based on the specified monitor type" },
+	{ OSDOPTION_MONITOR ";m",                 "generic_15",     OPTION_STRING,    "Monitor type, e.g.: generic_15, arcade_15, lcd, custom, etc." },
+	{ OSDOPTION_INTERLACE ";in",              "1",              OPTION_BOOLEAN,   "Enable interlaced scanning when necessary" },
+	{ OSDOPTION_DOUBLESCAN ";ds",             "0",              OPTION_BOOLEAN,   "Enable double scanning when necessary (unsupported by some backends/gpus)" },
+	{ OSDOPTION_SUPER_WIDTH ";cs",            "2560",           OPTION_INTEGER,   "Automatically apply -unevenstretchx if resolution width is equal or greater than this value" },
+	{ OSDOPTION_CHANGERES ";cr",              "1",              OPTION_BOOLEAN,   "Enable dynamic in-game video mode switching" },
+	{ OSDOPTION_LOCK_SYSTEM_MODES ";lsm",     "1",              OPTION_BOOLEAN,   "Lock system (non-custom) video modes, only use modes created by us" },
+	{ OSDOPTION_LOCK_UNSUPPORTED_MODES ";lum","1",              OPTION_BOOLEAN,   "Lock video modes reported as unsupported by your monitor's EDID" },
+	{ OSDOPTION_REFRESH_DONT_CARE ";rdc",     "0",              OPTION_BOOLEAN,   "Ignore video mode's refresh reported by OS when checking ranges" },
+	{ OSDOPTION_DOTCLOCK_MIN ";dcm",          "0",              OPTION_FLOAT,     "Lowest pixel clock supported by video card, in MHz, default is 0" },
+	{ OSDOPTION_V_SHIFT_CORRECT,              "0",              OPTION_INTEGER,   "Apply vertical shift correction for multi-standard consumer CRT TVs"},
+	{ OSDOPTION_PIXEL_PRECISION,              "1",              OPTION_BOOLEAN,   "Calculate horizontal values with 1-pixel precision to improve horizontal centering" },
+	{ OSDOPTION_SYNC_REFRESH_TOLERANCE ";srt","2.0",            OPTION_FLOAT,     "Maximum refresh difference, in Hz, allowed in order to synchronize" },
+	{ OSDOPTION_AUTOSYNC,                     "1",              OPTION_BOOLEAN,   "automatically enable syncrefresh if refresh difference is below syncrefresh_tolerance" },
+	{ OSDOPTION_SCREEN_COMPOSITING,           "0",              OPTION_BOOLEAN,   "Readjust relative screen positions of a multi-display setup after mode switching (Linux)" },
+	{ OSDOPTION_SCREEN_REORDERING,            "0",              OPTION_BOOLEAN,   "Reallocates desktop multiple screens stacked vertically, so super-resolutions fit (Linux)" },
+	{ OSDOPTION_ALLOW_HW_REFRESH,             "0",              OPTION_BOOLEAN,   "Allow on-the-fly mode addition (Windows)" },
+	{ OSDOPTION_MODELINE ";mode",             "auto",           OPTION_STRING,    "Use custom defined modeline" },
+	{ OSDOPTION_PS_TIMING ";pst",             "auto",           OPTION_STRING,    "Use custom Powertrip timing string" },
+	{ OSDOPTION_LCD_RANGE ";lcd",             "auto",           OPTION_STRING,    "Add custom LCD range, VfreqMin-VfreqMax, in Hz, e.g.: 55.50-61.00" },
+	{ OSDOPTION_CRT_RANGE "0",                "auto",           OPTION_STRING,    "Add custom CRT range, see documentation for details." },
+	{ OSDOPTION_CRT_RANGE "1",                "auto",           OPTION_STRING,    "Add custom CRT range" },
+	{ OSDOPTION_CRT_RANGE "2",                "auto",           OPTION_STRING,    "Add custom CRT range" },
+	{ OSDOPTION_CRT_RANGE "3",                "auto",           OPTION_STRING,    "Add custom CRT range" },
+	{ OSDOPTION_CRT_RANGE "4",                "auto",           OPTION_STRING,    "Add custom CRT range" },
+	{ OSDOPTION_CRT_RANGE "5",                "auto",           OPTION_STRING,    "Add custom CRT range" },
+	{ OSDOPTION_CRT_RANGE "6",                "auto",           OPTION_STRING,    "Add custom CRT range" },
+	{ OSDOPTION_CRT_RANGE "7",                "auto",           OPTION_STRING,    "Add custom CRT range" },
+	{ OSDOPTION_CRT_RANGE "8",                "auto",           OPTION_STRING,    "Add custom CRT range" },
+	{ OSDOPTION_CRT_RANGE "9",                "auto",           OPTION_STRING,    "Add custom CRT range" },
 
 	{ nullptr,                                nullptr,          OPTION_HEADER,    "OSD ACCELERATED VIDEO OPTIONS" },
-	{ OSDOPTION_FILTER ";glfilter;flt",       "1",              OPTION_BOOLEAN,   "use bilinear filtering when scaling emulated video" },
+	{ OSDOPTION_FILTER ";glfilter;flt",       "0",              OPTION_BOOLEAN,   "use bilinear filtering when scaling emulated video" },
 	{ OSDOPTION_PRESCALE "(1-8)",             "1",              OPTION_INTEGER,   "scale emulated video by this factor before applying filters/shaders" },
 
 #if USE_OPENGL
@@ -651,6 +682,8 @@ void osd_common_t::init_subsystems()
 	assert(m_monitor_module != nullptr);
 	m_monitor_module->init(options());
 
+	m_switchres.init(machine());
+
 	if (!video_init())
 	{
 		video_exit();
@@ -735,6 +768,7 @@ void osd_common_t::input_resume()
 void osd_common_t::exit_subsystems()
 {
 	video_exit();
+	m_switchres.exit();
 }
 
 void osd_common_t::video_exit()

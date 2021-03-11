@@ -105,7 +105,7 @@ void stream_buffer::set_sample_rate(u32 rate, bool resample)
 	// voice when jumping off the edge in Q*Bert; without this extra effort
 	// it is crackly and/or glitchy at times
 	sample_t buffer[64];
-	int buffered_samples = std::min(m_sample_rate, std::min(rate, u32(ARRAY_LENGTH(buffer))));
+	int buffered_samples = std::min(m_sample_rate, std::min(rate, u32(std::size(buffer))));
 
 	// if the new rate is lower, downsample into our holding buffer;
 	// otherwise just copy into our holding buffer for later upsampling
@@ -203,12 +203,12 @@ void stream_buffer::flush_wav()
 
 	// iterate over chunks for conversion
 	s16 buffer[1024];
-	for (int samplebase = 0; samplebase < view.samples(); samplebase += ARRAY_LENGTH(buffer))
+	for (int samplebase = 0; samplebase < view.samples(); samplebase += std::size(buffer))
 	{
 		// clamp to the buffer size
 		int cursamples = view.samples() - samplebase;
-		if (cursamples > ARRAY_LENGTH(buffer))
-			cursamples = ARRAY_LENGTH(buffer);
+		if (cursamples > std::size(buffer))
+			cursamples = std::size(buffer);
 
 		// convert and fill
 		for (int sampindex = 0; sampindex < cursamples; sampindex++)
@@ -1529,13 +1529,13 @@ void sound_manager::update(void *ptr, int param)
 	stream_buffer::sample_t lprev = 0, rprev = 0;
 
 	// now downmix the final result
-	u32 finalmix_step = machine().video().speed_factor();
+	u32 finalmix_step = machine().video().speed_factor() * 100;
 	u32 finalmix_offset = 0;
 	s16 *finalmix = &m_finalmix[0];
 	int sample;
-	for (sample = m_finalmix_leftover; sample < m_samples_this_update * 1000; sample += finalmix_step)
+	for (sample = m_finalmix_leftover; sample < m_samples_this_update * 100000; sample += finalmix_step)
 	{
-		int sampindex = sample / 1000;
+		int sampindex = sample / 100000;
 
 		// ensure that changing the compression won't reverse direction to reduce "pops"
 		stream_buffer::sample_t lsamp = m_leftmix[sampindex];
@@ -1563,7 +1563,7 @@ void sound_manager::update(void *ptr, int param)
 			rsamp = -1.0;
 		finalmix[finalmix_offset++] = s16(rsamp * 32767.0);
 	}
-	m_finalmix_leftover = sample - m_samples_this_update * 1000;
+	m_finalmix_leftover = sample - m_samples_this_update * 100000;
 
 	// play the result
 	if (finalmix_offset > 0)

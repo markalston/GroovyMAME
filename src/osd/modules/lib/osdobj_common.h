@@ -24,8 +24,10 @@
 #include "modules/midi/midi_module.h"
 #include "modules/output/output_module.h"
 #include "modules/monitor/monitor_module.h"
+#include "modules/switchres/switchres_module.h"
 #include "emuopts.h"
 #include "../frontend/mame/ui/menuitem.h"
+#include <list>
 
 //============================================================
 //  Defines
@@ -50,7 +52,6 @@
 #define OSDOPTION_WINDOW                "window"
 #define OSDOPTION_MAXIMIZE              "maximize"
 #define OSDOPTION_WAITVSYNC             "waitvsync"
-#define OSDOPTION_SYNCREFRESH           "syncrefresh"
 
 #define OSDOPTION_SCREEN                "screen"
 #define OSDOPTION_ASPECT                "aspect"
@@ -92,6 +93,31 @@
 #define OSDOPTION_BGFX_LUT              "bgfx_lut"
 #define OSDOPTION_BGFX_AVI_NAME         "bgfx_avi_name"
 
+#define OSDOPTION_SWITCHRES_BACKEND     "switchres_backend"
+#define OSDOPTION_MODE_SETTING          "modesetting"
+#define OSDOPTION_MODELINE_GENERATION   "modeline_generation"
+#define OSDOPTION_MONITOR               "monitor"
+#define OSDOPTION_INTERLACE             "interlace"
+#define OSDOPTION_DOUBLESCAN            "doublescan"
+#define OSDOPTION_SUPER_WIDTH           "super_width"
+#define OSDOPTION_CHANGERES             "changeres"
+#define OSDOPTION_LOCK_SYSTEM_MODES     "lock_system_modes"
+#define OSDOPTION_LOCK_UNSUPPORTED_MODES "lock_unsupported_modes"
+#define OSDOPTION_REFRESH_DONT_CARE     "refresh_dont_care"
+#define OSDOPTION_DOTCLOCK_MIN          "dotclock_min"
+#define OSDOPTION_V_SHIFT_CORRECT       "v_shift_correct"
+#define OSDOPTION_PIXEL_PRECISION       "pixel_precision"
+#define OSDOPTION_SYNC_REFRESH_TOLERANCE "sync_refresh_tolerance"
+#define OSDOPTION_AUTOSYNC              "autosync"
+#define OSDOPTION_SCREEN_COMPOSITING    "screen_compositing"
+#define OSDOPTION_SCREEN_REORDERING     "screen_reordering"
+#define OSDOPTION_ALLOW_HW_REFRESH      "allow_hw_refresh"
+#define OSDOPTION_MODELINE              "modeline"
+#define OSDOPTION_PS_TIMING             "ps_timing"
+#define OSDOPTION_LCD_RANGE             "lcd_range"
+#define OSDOPTION_CRT_RANGE             "crt_range"
+
+
 //============================================================
 //  TYPE DEFINITIONS
 //============================================================
@@ -122,7 +148,6 @@ public:
 	bool window() const { return bool_value(OSDOPTION_WINDOW); }
 	bool maximize() const { return bool_value(OSDOPTION_MAXIMIZE); }
 	bool wait_vsync() const { return bool_value(OSDOPTION_WAITVSYNC); }
-	bool sync_refresh() const { return bool_value(OSDOPTION_SYNCREFRESH); }
 
 	// per-window options
 	const char *screen() const { return value(OSDOPTION_SCREEN); }
@@ -136,6 +161,29 @@ public:
 
 	// full screen options
 	bool switch_res() const { return bool_value(OSDOPTION_SWITCHRES); }
+	const char *switchres_backend() const { return value(OSDOPTION_SWITCHRES_BACKEND); }
+	bool mode_setting() const { return bool_value(OSDOPTION_MODE_SETTING); }
+	bool modeline_generation() const { return bool_value(OSDOPTION_MODELINE_GENERATION); }
+	const char *monitor() const { return value(OSDOPTION_MONITOR); }
+	bool doublescan() const { return bool_value(OSDOPTION_DOUBLESCAN); }
+	bool interlace() const { return bool_value(OSDOPTION_INTERLACE); }
+	int super_width() const { return int_value(OSDOPTION_SUPER_WIDTH); }
+	bool changeres() const { return int_value(OSDOPTION_CHANGERES); }
+	bool lock_system_modes() const { return bool_value(OSDOPTION_LOCK_SYSTEM_MODES); }
+	bool lock_unsupported_modes() const { return bool_value(OSDOPTION_LOCK_UNSUPPORTED_MODES); }
+	bool refresh_dont_care() const { return bool_value(OSDOPTION_REFRESH_DONT_CARE); }
+	float dotclock_min() const { return float_value(OSDOPTION_DOTCLOCK_MIN); }
+	int v_shift_correct() const { return int_value(OSDOPTION_V_SHIFT_CORRECT); }
+	bool pixel_precision() const { return bool_value(OSDOPTION_PIXEL_PRECISION); }
+	float sync_refresh_tolerance() const { return float_value(OSDOPTION_SYNC_REFRESH_TOLERANCE); }
+	bool autosync() const { return bool_value(OSDOPTION_AUTOSYNC); }
+	bool screen_compositing() const { return bool_value(OSDOPTION_SCREEN_COMPOSITING); }
+	bool screen_reordering() const { return bool_value(OSDOPTION_SCREEN_REORDERING); }
+	bool allow_hw_refresh() const { return bool_value(OSDOPTION_ALLOW_HW_REFRESH); }
+	const char *modeline() const { return value(OSDOPTION_MODELINE); }
+	const char *ps_timing() const { return value(OSDOPTION_PS_TIMING); }
+	const char *lcd_range() const { return value(OSDOPTION_LCD_RANGE); }
+	const char *crt_range(int index) const { return value(string_format("%s%d", OSDOPTION_CRT_RANGE, index).c_str()); }
 
 	// accelerated video options
 	bool filter() const { return bool_value(OSDOPTION_FILTER); }
@@ -218,11 +266,14 @@ public:
 
 	virtual std::unique_ptr<osd_midi_device> create_midi_device() override { return m_midi->create_midi_device(); }
 
+	virtual const char *switchres_mode(int i) override { return m_switchres.display_mode_to_txt(i); }
+
 	// FIXME: everything below seems to be osd specific and not part of
 	//        this INTERFACE but part of the osd IMPLEMENTATION
 
 	// getters
 	running_machine &machine() const { assert(m_machine != nullptr); return *m_machine; }
+	switchres_module *switchres() { return &m_switchres; }
 
 	virtual void debugger_update();
 
@@ -303,6 +354,7 @@ protected:
 	monitor_module* m_monitor_module;
 	std::unique_ptr<osd_watchdog> m_watchdog;
 	std::vector<ui::menu_item> m_sliders;
+	switchres_module m_switchres;
 
 private:
 	std::vector<const char *> m_video_names;

@@ -17,6 +17,7 @@
 #include "romload.h"
 #include "softlist.h"
 #include "emuopts.h"
+#include "osdepend.h"
 
 
 namespace ui {
@@ -432,6 +433,7 @@ std::string machine_info::game_info_string() const
 		buf << _("None\n");
 	else
 	{
+		int i = 0;
 		for (screen_device &screen : scriter)
 		{
 			std::string detail;
@@ -454,6 +456,9 @@ std::string machine_info::game_info_string() const
 			util::stream_format(buf,
 					(scrcount > 1) ? _("%1$s: %2$s\n") : _("%2$s\n"),
 					get_screen_desc(screen), detail);
+
+			// display Switchres information
+			buf << _(m_machine.osd().switchres_mode(i++));
 		}
 	}
 

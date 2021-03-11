@@ -778,6 +778,10 @@ void win_window_info::create(running_machine &machine, int index, std::shared_pt
 	window->m_targetlayerconfig = window->target()->layer_config();
 	window->m_targetvismask = window->target()->visibility_mask();
 
+	// add they switchres display manager
+	if (window->m_fullscreen_safe && downcast<windows_options &>(machine.options()).switch_res())
+		window->m_display_manager = WINOSD(machine)->switchres()->add_display(index, monitor.get(), window->target(), &window->m_win_config);
+
 	// set the initial maximized state
 	window->m_startmaximized = downcast<windows_options &>(machine.options()).maximize();
 
@@ -833,6 +837,27 @@ void win_window_info::update()
 			if (m_ismaximized)
 				SendMessage(platform_window(), WM_USER_SET_MAXSIZE, 0, 0);
 		}
+	}
+
+	bool reset_required = false;
+
+	// check if we need to change the video mode
+	auto &options = downcast<windows_options &>(machine().options());
+	if (options.switch_res() && options.changeres())
+		reset_required = WINOSD(machine())->switchres()->check_resolution_change(index(), monitor(), target(), &m_win_config);
+
+	// check if frame delay has changed
+	int new_frame_delay = machine().video().framedelay();
+	if (new_frame_delay != video_config.framedelay)
+	{
+		reset_required |= ((bool)video_config.framedelay != (bool)new_frame_delay);
+		video_config.framedelay = new_frame_delay;
+	}
+
+	if (reset_required)
+	{
+		reset_fullscreen_renderer();
+		return;
 	}
 
 	// if we're visible and running and not in the middle of a resize, draw
@@ -1279,6 +1304,9 @@ LRESULT CALLBACK win_window_info::video_window_proc(HWND wnd, UINT message, WPAR
 			{
 				for (const auto &w : osd_common_t::s_window_list)
 					ShowWindow(std::static_pointer_cast<win_window_info>(w)->platform_window(), SW_RESTORE);
+
+				// Set the first window as foreground
+				SetForegroundWindow(std::static_pointer_cast<win_window_info>(osd_common_t::s_window_list.front())->platform_window());
 			}
 			else if ((wparam == WA_INACTIVE) && !is_mame_window(HWND(lparam)))
 			{
@@ -1326,6 +1354,12 @@ LRESULT CALLBACK win_window_info::video_window_proc(HWND wnd, UINT message, WPAR
 		window->maximize_window();
 		break;
 
+	// make sure the taskbar doesn't get on top of us
+	case WM_DEVICECHANGE:
+	case WM_WININICHANGE:
+		SetWindowPos(wnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+		break;
+
 	// maximum size set
 	case WM_DISPLAYCHANGE:
 		/* FIXME: The current codebase has an issue with setting aspect
@@ -1335,7 +1369,6 @@ LRESULT CALLBACK win_window_info::video_window_proc(HWND wnd, UINT message, WPAR
 		 * should be used.
 		 */
 		window->monitor()->refresh();
-		window->monitor()->update_resolution(LOWORD(lparam), HIWORD(lparam));
 		break;
 
 	// set focus: if we're not the primary window, switch back
@@ -1832,6 +1865,28 @@ void win_window_info::set_fullscreen(int fullscreen)
 	}
 
 	// ensure we're still adjusted correctly
+	adjust_window_position_after_major_change();
+}
+
+
+//============================================================
+//  reset_fullscreen_renderer
+//============================================================
+
+void win_window_info::reset_fullscreen_renderer()
+{
+	// if we're in the right state, punt
+	if (!m_fullscreen)
+		return;
+
+	// D3D renderer needs a reset
+	if (video_config.mode == VIDEO_MODE_D3D)
+	{
+		renderer().restart();
+		return;
+	}
+
+	// Resize our window if required
 	adjust_window_position_after_major_change();
 }
 
