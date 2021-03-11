@@ -55,11 +55,7 @@ int modeline_create(modeline *s_mode, modeline *t_mode, monitor_range *range, ge
 	double borders = 0;
 	t_mode->result.weight = 0;
 
-<<<<<<< HEAD
-	// ··· Vertical refresh ···
-=======
 	// â‰ˆâ‰ˆâ‰ˆ Vertical refresh â‰ˆâ‰ˆâ‰ˆ
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 	// try to fit vertical frequency into current range
 	v_scale = scale_into_range(t_mode->vfreq, range->vfreq_min, range->vfreq_max);
 
@@ -74,11 +70,7 @@ int modeline_create(modeline *s_mode, modeline *t_mode, monitor_range *range, ge
 		return -1;
 	}
 
-<<<<<<< HEAD
-	// ··· Vertical resolution ···
-=======
 	// â‰ˆâ‰ˆâ‰ˆ Vertical resolution â‰ˆâ‰ˆâ‰ˆ
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 	// try to fit active lines in the progressive range first
 	if (range->progressive_lines_min && (!t_mode->interlace || (t_mode->type & SCAN_EDITABLE)))
 		y_scale = scale_into_range(t_mode->vactive, range->progressive_lines_min, range->progressive_lines_max);
@@ -161,11 +153,7 @@ int modeline_create(modeline *s_mode, modeline *t_mode, monitor_range *range, ge
 		return -1;
 	}
 
-<<<<<<< HEAD
-	// ··· Horizontal resolution ···
-=======
 	// â‰ˆâ‰ˆâ‰ˆ Horizontal resolution â‰ˆâ‰ˆâ‰ˆ
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 	// make the best possible adjustment of xres depending on what happened in the previous steps
 	// let's start with the SCALED case
 	if (!(t_mode->result.weight & R_RES_STRETCH))
@@ -229,11 +217,7 @@ int modeline_create(modeline *s_mode, modeline *t_mode, monitor_range *range, ge
 	if (fabs(v_diff) > cs->refresh_tolerance)
 		t_mode->result.weight |= R_V_FREQ_OFF;
 
-<<<<<<< HEAD
-	// ··· Modeline generation ···
-=======
 	// â‰ˆâ‰ˆâ‰ˆ Modeline generation â‰ˆâ‰ˆâ‰ˆ
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 	// compute new modeline if we are allowed to
 	if (t_mode->type & V_FREQ_EDITABLE)
 	{
@@ -331,19 +315,11 @@ int get_line_params(modeline *mode, monitor_range *range, int char_size)
 			hs++;
 
 		if (he * char_time < hsync_pulse_min ||
-<<<<<<< HEAD
-		    fabs((he + 1) * char_time - range->hsync_pulse) < fabs(he * char_time - range->hsync_pulse))
-			he++;
-
-		if (ht * char_time < hback_porch_min ||
-		    fabs((ht + 1) * char_time - range->hback_porch) < fabs(ht * char_time - range->hback_porch))
-=======
 			fabs((he + 1) * char_time - range->hsync_pulse) < fabs(he * char_time - range->hsync_pulse))
 			he++;
 
 		if (ht * char_time < hback_porch_min ||
 			fabs((ht + 1) * char_time - range->hback_porch) < fabs(ht * char_time - range->hback_porch))
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 			ht++;
 
 		new_char_time = line_time / (hh + hs + he + ht);
@@ -521,11 +497,7 @@ int modeline_compare(modeline *t, modeline *best)
 			double t_y_score = t->result.y_ratio * (t->interlace?(2.0/3.0):1.0);
 			double b_y_score = best->result.y_ratio * (best->interlace?(2.0/3.0):1.0);
 
-<<<<<<< HEAD
-			if	((t_v_diff <  b_v_diff) ||
-=======
 			if  ((t_v_diff <  b_v_diff) ||
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 				((t_v_diff == b_v_diff) && (t_y_score > b_y_score)) ||
 				((t_v_diff == b_v_diff) && (t_y_score == b_y_score) && (t->result.x_ratio > best->result.x_ratio)))
 					return 1;
@@ -537,11 +509,7 @@ int modeline_compare(modeline *t, modeline *best)
 			double xy_diff = roundf((t->result.x_diff + t->result.y_diff) * 100) / 100;
 			double best_xy_diff = roundf((best->result.x_diff + best->result.y_diff) * 100) / 100;
 
-<<<<<<< HEAD
-			if	((t_y_score < b_y_score) ||
-=======
 			if  ((t_y_score < b_y_score) ||
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 				((t_y_score == b_y_score) && (xy_diff < best_xy_diff)) ||
 				((t_y_score == b_y_score) && (xy_diff == best_xy_diff) && (t->result.x_scale < best->result.x_scale)) ||
 				((t_y_score == b_y_score) && (xy_diff == best_xy_diff) && (t->result.x_scale == best->result.x_scale) && (t_v_diff <  b_v_diff)))
@@ -620,49 +588,6 @@ int modeline_parse(const char *user_modeline, modeline *mode)
 {
 	char modeline_txt[256]={'\x00'};
 
-<<<<<<< HEAD
-	if (strcmp(user_modeline, "auto"))
-	{
-		// Remove quotes
-		char *quote_start, *quote_end;
-		quote_start = strstr((char*)user_modeline, "\"");
-		if (quote_start)
-		{
-			quote_start++;
-			quote_end = strstr(quote_start, "\"");
-			if (!quote_end || *quote_end++ == 0)
-				return false;
-			user_modeline = quote_end;
-		}
-
-		// Get timing flags
-		mode->interlace = strstr(user_modeline, "interlace")?1:0;
-		mode->doublescan = strstr(user_modeline, "doublescan")?1:0;
-		mode->hsync = strstr(user_modeline, "+hsync")?1:0;
-		mode->vsync = strstr(user_modeline, "+vsync")?1:0;
-
-		// Get timing values
-		double pclock;
-		int e = sscanf(user_modeline, " %lf %d %d %d %d %d %d %d %d",
-			&pclock,
-			&mode->hactive, &mode->hbegin, &mode->hend, &mode->htotal,
-			&mode->vactive, &mode->vbegin, &mode->vend, &mode->vtotal);
-
-		if (e != 9)
-		{
-			log_error("SwitchRes: missing parameter in user modeline\n  %s\n", user_modeline);
-			memset(mode, 0, sizeof(struct modeline));
-			return false;
-		}
-
-		// Calculate timings
-		mode->pclock = pclock * 1000000.0;
-		mode->hfreq = mode->pclock / mode->htotal;
-		mode->vfreq = mode->hfreq / mode->vtotal * (mode->interlace?2:1);
-		mode->refresh = mode->vfreq;
-		log_verbose("SwitchRes: user modeline %s\n", modeline_print(mode, modeline_txt, MS_FULL));
-	}
-=======
 	if (!strcmp(user_modeline, "auto"))
 		return false;
 
@@ -707,7 +632,6 @@ int modeline_parse(const char *user_modeline, modeline *mode)
 	mode->height = mode->vactive;
 	log_verbose("SwitchRes: user modeline %s\n", modeline_print(mode, modeline_txt, MS_FULL));
 
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 	return true;
 }
 
@@ -816,11 +740,7 @@ int monitor_fill_vesa_range(monitor_range *range, int lines_min, int lines_max)
 
 int round_near(double number)
 {
-<<<<<<< HEAD
-    return number < 0.0 ? ceil(number - 0.5) : floor(number + 0.5);
-=======
 	return number < 0.0 ? ceil(number - 0.5) : floor(number + 0.5);
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 }
 
 //============================================================

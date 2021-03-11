@@ -319,36 +319,6 @@ private:
 	void sliders_load(config_type cfg_type, util::xml::data_node const *parentnode);
 	void sliders_save(config_type cfg_type, util::xml::data_node *parentnode);
 	void sliders_apply(void);
-<<<<<<< HEAD
-	std::unique_ptr<slider_state> slider_alloc(int id, const char *title, int32_t minval, int32_t defval, int32_t maxval, int32_t incval, void *arg);
-
-	// slider controls
-	virtual int32_t slider_changed(running_machine &machine, void *arg, int id, std::string *str, int32_t newval) override;
-
-	int32_t slider_volume(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_framedelay(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_vsync_offset(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_mixervol(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_adjuster(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_overclock(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_refresh(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_brightness(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_contrast(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_gamma(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_xscale(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_yscale(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_xoffset(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_yoffset(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_overxscale(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_overyscale(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_overxoffset(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_overyoffset(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_flicker(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_beam_width_min(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_beam_width_max(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_beam_dot_size(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-	int32_t slider_beam_intensity_weight(running_machine &machine, void *arg, int id, std::string *str, int32_t newval);
-=======
 	template <typename... Params> void slider_alloc(Params &&...args) { m_sliders.push_back(std::make_unique<slider_state>(std::forward<Params>(args)...)); }
 	template <typename... Params> void slider_saved_alloc(Params &&...args) { m_sliders_saved.push_back(std::make_unique<slider_state>(std::forward<Params>(args)...)); }
 
@@ -376,7 +346,6 @@ private:
 	int32_t slider_beam_width_max(screen_device &screen, std::string *str, int32_t newval);
 	int32_t slider_beam_dot_size(screen_device &screen, std::string *str, int32_t newval);
 	int32_t slider_beam_intensity_weight(screen_device &screen, std::string *str, int32_t newval);
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 	std::string slider_get_screen_desc(screen_device &screen);
 	#ifdef MAME_DEBUG
 	int32_t slider_crossscale(ioport_field &field, std::string *str, int32_t newval);

@@ -49,10 +49,7 @@ int main(int argc, char **argv)
 	bool help_flag = false;
 	bool resolution_flag = false;
 	bool calculate_flag = false;
-<<<<<<< HEAD
-=======
 	bool edid_flag = false;
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 	bool switch_flag = false;
 	bool launch_flag = false;
 	bool force_flag = false;
@@ -74,10 +71,7 @@ int main(int argc, char **argv)
 			{"launch",      required_argument, 0, 'l'},
 			{"monitor",     required_argument, 0, 'm'},
 			{"aspect",      required_argument, 0, 'a'},
-<<<<<<< HEAD
-=======
 			{"edid",        no_argument,       0, 'e'},
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 			{"rotated",     no_argument,       0, 'r'},
 			{"display",     required_argument, 0, 'd'},
 			{"force",       required_argument, 0, 'f'},
@@ -89,11 +83,7 @@ int main(int argc, char **argv)
 		};
 
 		int option_index = 0;
-<<<<<<< HEAD
-		int c = getopt_long(argc, argv, "vhcsl:m:a:rd:f:i:b:k", long_options, &option_index);
-=======
 		int c = getopt_long(argc, argv, "vhcsl:m:a:erd:f:i:b:k", long_options, &option_index);
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 
 		if (c == -1)
 			break;
@@ -146,13 +136,10 @@ int main(int argc, char **argv)
 				switchres.set_monitor_aspect(optarg);
 				break;
 
-<<<<<<< HEAD
-=======
 			case 'e':
 				edid_flag = true;
 				break;
 
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 			case 'f':
 				force_flag = true;
 				if (sscanf(optarg, "%dx%d@%d", &user_mode.width, &user_mode.height, &user_mode.refresh) < 1)
@@ -211,13 +198,8 @@ int main(int argc, char **argv)
 
 	if (force_flag)
 		switchres.display()->set_user_mode(&user_mode);
-<<<<<<< HEAD
-	
-	if (!calculate_flag)
-=======
 
 	if (!calculate_flag && !edid_flag)
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 	{
 		for (auto &display : switchres.displays)
 			display->init();
@@ -228,21 +210,6 @@ int main(int argc, char **argv)
 		for (auto &display : switchres.displays)
 		{
 			modeline *mode = display->get_mode(width, height, refresh, interlaced_flag);
-<<<<<<< HEAD
-			if (mode)
-			{
-//				if (mode->type & MODE_UPDATE) display->update_mode(mode);
-
-//				else if (mode->type & MODE_ADD) display->add_mode(mode);
-				display->flush_modes();
-			}
-		}
-
-		switchres.display()->get_mode(720, 512, 55, 0);
-		switchres.display()->get_mode(652, 496, 57, 0);
-		switchres.display()->flush_modes();
-
-=======
 			if (mode) display->flush_modes();
 		}
 
@@ -268,7 +235,6 @@ int main(int argc, char **argv)
 			}
 		}
 
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 		if (switch_flag) for (auto &display : switchres.displays) display->set_mode(display->best_mode());
 
 		if (switch_flag && !launch_flag && !keep_changes_flag)
@@ -301,11 +267,7 @@ int show_version()
 	{
 		"Switchres " SWITCHRES_VERSION "\n"
 		"Modeline generation engine for emulation\n"
-<<<<<<< HEAD
-		"Copyright (C) 2010-2020 - Chris Kennedy, Antonio Giner, Alexandre Wodarczyk, Gil Delescluse\n"
-=======
 		"Copyright (C) 2010-2021 - Chris Kennedy, Antonio Giner, Alexandre Wodarczyk, Gil Delescluse\n"
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 		"License GPL-2.0+\n"
 		"This is free software: you are free to change and redistribute it.\n"
 		"There is NO WARRANTY, to the extent permitted by law.\n"
@@ -335,10 +297,7 @@ int show_usage()
 		"  -f, --force <w>x<h>@<r>           Force a specific video mode from display mode list\n"
 		"  -i, --ini <file.ini>              Specify an ini file\n"
 		"  -b, --backend <api_name>          Specify the api name\n"
-<<<<<<< HEAD
-=======
 		"  -e, --edid                        Create an EDID binary with calculated video modes\n"
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 		"  -k, --keep                        Keep changes on exit (warning: this disables cleanup)\n"
 	};
 

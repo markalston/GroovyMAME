@@ -45,13 +45,6 @@ display_manager *display_manager::make(display_settings *ds)
 
 void display_manager::parse_options()
 {
-<<<<<<< HEAD
-	// Get user defined modeline
-	modeline user_mode = {};
-	if (m_ds.modeline_generation)
-	{
-		if (modeline_parse(m_ds.modeline, &user_mode))
-=======
 	// Get user_mode as <w>x<h>@<r>
 	set_user_mode(&m_ds.user_mode);
 
@@ -60,7 +53,6 @@ void display_manager::parse_options()
 	if (m_ds.modeline_generation)
 	{
 		if (modeline_parse(m_ds.user_modeline, &user_mode))
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 		{
 			user_mode.type |= MODE_USER_DEF;
 			set_user_mode(&user_mode);
@@ -127,11 +119,7 @@ bool display_manager::add_mode(modeline *mode)
 	{
 		log_verbose("Switchres: error adding mode ");
 		log_mode(mode);
-<<<<<<< HEAD
-		return false;		
-=======
 		return false;
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 	}
 
 	mode->type &= ~MODE_ADD;
@@ -239,12 +227,9 @@ bool display_manager::flush_modes()
 	bool error = false;
 	std::vector<modeline *> modified_modes = {};
 
-<<<<<<< HEAD
-=======
 	if (video() == nullptr)
 		return false;
 
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 	// Loop through our mode table to collect all pending changes
 	for (auto &mode : video_modes)
 		if (mode.type & (MODE_UPDATE | MODE_ADD | MODE_DELETE))
@@ -387,10 +372,6 @@ modeline *display_manager::get_mode(int width, int height, float refresh, bool i
 					if (t_mode.type & Y_RES_EDITABLE)
 						t_mode.vactive = m_user_mode.height? m_user_mode.height : s_mode.vactive;
 
-<<<<<<< HEAD
-					if (mode.type & V_FREQ_EDITABLE)
-						t_mode.vfreq = s_mode.vfreq;
-=======
 					if (t_mode.type & V_FREQ_EDITABLE)
 					{
 						// If user's vfreq is defined, it means we have an user modeline, so force it
@@ -399,15 +380,11 @@ modeline *display_manager::get_mode(int width, int height, float refresh, bool i
 						else
 							t_mode.vfreq = s_mode.vfreq;
 					}
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 
 					// lock resolution fields if required
 					if (m_user_mode.width) t_mode.type &= ~X_RES_EDITABLE;
 					if (m_user_mode.height) t_mode.type &= ~Y_RES_EDITABLE;
-<<<<<<< HEAD
-=======
 					if (m_user_mode.vfreq) t_mode.type &= ~V_FREQ_EDITABLE;
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 
 					modeline_create(&s_mode, &t_mode, &range[i], &m_ds.gs);
 					t_mode.range = i;
@@ -442,11 +419,7 @@ modeline *display_manager::get_mode(int width, int height, float refresh, bool i
 	log_verbose("%s\n", modeline_result(&best_mode, result));
 
 	// Copy the new modeline to our mode list
-<<<<<<< HEAD
-	if (m_ds.modeline_generation && (best_mode.type & V_FREQ_EDITABLE))
-=======
 	if (m_ds.modeline_generation)
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 	{
 		if (best_mode.type & MODE_ADD)
 		{

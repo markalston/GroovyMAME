@@ -167,11 +167,7 @@ MODULE_API void sr_set_rotation (unsigned char r) {
 }
 
 
-<<<<<<< HEAD
-MODULE_API srAPI srlib = { 
-=======
 MODULE_API srAPI srlib = {
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 	sr_init,
 	sr_deinit,
 	sr_init_disp,

@@ -81,17 +81,10 @@ custom_video *custom_video::make(char *device_name, char *device_id, int method,
 
 	if (method == CUSTOM_VIDEO_TIMING_XRANDR || method == 0)
 	{
-<<<<<<< HEAD
-		try 
-		{
-			m_custom_video = new xrandr_timing(device_name, vs);
-		} 
-=======
 		try
 		{
 			m_custom_video = new xrandr_timing(device_name, vs);
 		}
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 		catch (...) {};
 		if (m_custom_video)
 		{

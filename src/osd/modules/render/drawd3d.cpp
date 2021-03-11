@@ -831,11 +831,7 @@ void renderer_d3d9::update_break_scanlines()
 	//auto win = assert_window();
 	m_break_scanline = m_last_scanline - m_vsync_offset;
 	m_break_scanline = m_break_scanline > m_first_scanline ? m_break_scanline : m_last_scanline;
-<<<<<<< HEAD
-	m_delay_scanline = m_first_scanline + m_height * (float)video_config.framedelay / 10;
-=======
 	m_delay_scanline = m_first_scanline + m_height * (float)video_config.framedelay / (10 * m_switchres_mode->result.v_scale);
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 
 	osd_printf_verbose("Direct3D: Frame delay: %d, First scanline: %d, Last scanline: %d, Break scanline: %d, Delay scanline: %d\n", video_config.framedelay, m_first_scanline, m_last_scanline, m_break_scanline, m_delay_scanline);
 }
@@ -1430,27 +1426,6 @@ void renderer_d3d9::pick_best_mode()
 
 	auto win = assert_window();
 
-<<<<<<< HEAD
-	// only link window #0 to SwitchRes
-	if (win->index() == 0)
-	{
-		modeline *m_switchres_mode = downcast<windows_osd_interface&>(win->machine().osd()).switchres()->switchres().display(win->index())->best_mode();
-		if (m_switchres_mode)
-		{
-			m_width = m_switchres_mode->type & MODE_ROTATED? m_switchres_mode->height : m_switchres_mode->width;
-			m_height = m_switchres_mode->type & MODE_ROTATED? m_switchres_mode->width : m_switchres_mode->height;
-			m_refresh = (int)m_switchres_mode->refresh;
-			m_interlace = m_switchres_mode->interlace;
-
-			m_display_mode.Size = sizeof(D3DDISPLAYMODEEX);
-			m_display_mode.Width = m_width;
-			m_display_mode.Height = m_height;
-			m_display_mode.RefreshRate = m_refresh;
-			m_display_mode.Format = m_pixformat;
-			m_display_mode.ScanLineOrdering = m_interlace? D3DSCANLINEORDERING_INTERLACED : D3DSCANLINEORDERING_PROGRESSIVE;
-			return;
-		}
-=======
 	modeline *m_switchres_mode = downcast<windows_osd_interface&>(win->machine().osd()).switchres()->switchres().display(win->index())->best_mode();
 	if (m_switchres_mode)
 	{
@@ -1466,7 +1441,6 @@ void renderer_d3d9::pick_best_mode()
 		m_display_mode.Format = m_pixformat;
 		m_display_mode.ScanLineOrdering = m_interlace? D3DSCANLINEORDERING_INTERLACED : D3DSCANLINEORDERING_PROGRESSIVE;
 		return;
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 	}
 
 	// determine the refresh rate of the primary screen

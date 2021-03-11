@@ -11,17 +11,10 @@
 
  **************************************************************/
 
-<<<<<<< HEAD
-/*	Constants and structures ported from Linux open source drivers:
-	drivers\gpu\drm\radeon\radeon.h
-	drivers\gpu\drm\radeon\radeon_family.h
-	include\drm\drm_pciids.h
-=======
 /*  Constants and structures ported from Linux open source drivers:
     drivers\gpu\drm\radeon\radeon.h
     drivers\gpu\drm\radeon\radeon_family.h
     include\drm\drm_pciids.h
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 */
 
 #ifndef RADEON_FAMILY_H
@@ -852,8 +845,4 @@ bool ati_is_legacy(int vendor, int device)
 	return (ati_family(vendor, device) < CHIP_CEDAR);
 }
 
-<<<<<<< HEAD
 #endif
-=======
-#endif
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809

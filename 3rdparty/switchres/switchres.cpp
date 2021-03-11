@@ -71,11 +71,7 @@ bool get_value(const string& line, string& key, string& value)
 
 constexpr unsigned int s2i(const char* str, int h = 0)
 {
-<<<<<<< HEAD
-    return !str[h] ? 5381 : (s2i(str, h+1)*33) ^ str[h];
-=======
 	return !str[h] ? 5381 : (s2i(str, h+1)*33) ^ str[h];
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 }
 
 //============================================================
@@ -195,12 +191,9 @@ bool switchres_manager::parse_config(const char *file_name)
 			switch (s2i(key.c_str()))
 			{
 				// Switchres options
-<<<<<<< HEAD
-=======
 				case s2i("verbose"):
 					if (atoi(value.c_str())) set_log_verbose_fn((void*)printf);
 					break;
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 				case s2i("monitor"):
 					transform(value.begin(), value.end(), value.begin(), ::tolower);
 					set_monitor(value.c_str());
@@ -238,8 +231,6 @@ bool switchres_manager::parse_config(const char *file_name)
 				case s2i("lcd_range"):
 					set_lcd_range(value.c_str());
 					break;
-<<<<<<< HEAD
-=======
 				case s2i("modeline"):
 					set_modeline(value.c_str());
 					break;
@@ -255,7 +246,6 @@ bool switchres_manager::parse_config(const char *file_name)
 					}
 					break;
 				}
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 
 				// Display options
 				case s2i("display"):

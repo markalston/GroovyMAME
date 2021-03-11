@@ -1,16 +1,5 @@
 /**************************************************************
 
-<<<<<<< HEAD
-	custom_video_ati.h - ATI legacy library header
-
-	---------------------------------------------------------
-
-	Switchres	Modeline generation engine for emulation
-
-	License     GPL-2.0+
-	Copyright   2010-2020 Chris Kennedy, Antonio Giner,
-	                      Alexandre Wodarczyk, Gil Delescluse
-=======
     custom_video_ati.h - ATI legacy library header
 
     ---------------------------------------------------------
@@ -20,7 +9,6 @@
     License     GPL-2.0+
     Copyright   2010-2020 Chris Kennedy, Antonio Giner,
                           Alexandre Wodarczyk, Gil Delescluse
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 
  **************************************************************/
 
@@ -50,11 +38,7 @@ class ati_timing : public custom_video
 
 	private:
 		void refresh_timings(void);
-<<<<<<< HEAD
-		
-=======
 
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 		int get_DWORD(int i, char *lp_data);
 		int get_DWORD_BCD(int i, char *lp_data);
 		void set_DWORD(char *data_string, UINT32 data_word, int offset);

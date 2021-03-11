@@ -1,15 +1,4 @@
 /**************************************************************
-<<<<<<< HEAD
- 
-	 custom_video_powerstrip.h - PowerStrip interface routines
-	 
-	 ---------------------------------------------------------
- 
-	 Switchres   Modeline generation engine for emulation
-
-	 License     GPL-2.0+
-	 Copyright   2010-2020 Chris Kennedy, Antonio Giner,
-=======
 
      custom_video_powerstrip.h - PowerStrip interface routines
 
@@ -19,7 +8,6 @@
 
      License     GPL-2.0+
      Copyright   2010-2020 Chris Kennedy, Antonio Giner,
->>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
                            Alexandre Wodarczyk, Gil Delescluse
 
  **************************************************************/
