@@ -94,10 +94,17 @@ bool windows_display::init()
 	}
 
 	log_verbose("Switchres: Device key: %s\n", m_device_key);
+<<<<<<< HEAD
 	
 	// Initialize custom video
 	int method = CUSTOM_VIDEO_TIMING_AUTO;
 	if(!strcmp(m_ds.api, "powerstrip"))	method = CUSTOM_VIDEO_TIMING_POWERSTRIP;
+=======
+
+	// Initialize custom video
+	int method = CUSTOM_VIDEO_TIMING_AUTO;
+	if(!strcmp(m_ds.api, "powerstrip")) method = CUSTOM_VIDEO_TIMING_POWERSTRIP;
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 	strcpy(m_ds.vs.device_reg_key, m_device_key);
 
 	// Create custom video backend

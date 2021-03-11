@@ -1,5 +1,6 @@
 /**************************************************************
 
+<<<<<<< HEAD
 	custom_video_adl.cpp - ATI/AMD ADL library
 
 	---------------------------------------------------------
@@ -13,6 +14,21 @@
  **************************************************************/
 
 //	Constants and structures ported from AMD ADL SDK files
+=======
+    custom_video_adl.cpp - ATI/AMD ADL library
+
+    ---------------------------------------------------------
+
+    Switchres   Modeline generation engine for emulation
+
+    License     GPL-2.0+
+    Copyright   2010-2020 Chris Kennedy, Antonio Giner,
+                          Alexandre Wodarczyk, Gil Delescluse
+
+ **************************************************************/
+
+//  Constants and structures ported from AMD ADL SDK files
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 
 #include <windows.h>
 #include <stdio.h>
@@ -275,7 +291,11 @@ bool adl_timing::get_device_mapping_from_display_name()
 			}
 		}
 	}
+<<<<<<< HEAD
 	return false;   
+=======
+	return false;
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 }
 
 //============================================================
@@ -347,7 +367,11 @@ bool adl_timing::get_timing_from_cache(modeline *m)
 	return false;
 
 	found:
+<<<<<<< HEAD
 	if (display_mode_info_to_modeline(mode, m))	return true;
+=======
+	if (display_mode_info_to_modeline(mode, m)) return true;
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 
 	return false;
 }
@@ -529,4 +553,8 @@ bool adl_timing::process_modelist(std::vector<modeline *> modelist)
 
 	if (refresh_required) m_resync.wait();
 	return !error;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809

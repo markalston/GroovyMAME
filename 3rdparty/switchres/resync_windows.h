@@ -1,5 +1,6 @@
 /**************************************************************
 
+<<<<<<< HEAD
 	resync_windows.h - Windows device change notifying helper
 
 	---------------------------------------------------------
@@ -9,6 +10,17 @@
 	License     GPL-2.0+
 	Copyright   2010-2020 Chris Kennedy, Antonio Giner,
 	                     Alexandre Wodarczyk, Gil Delescluse
+=======
+    resync_windows.h - Windows device change notifying helper
+
+    ---------------------------------------------------------
+
+    Switchres   Modeline generation engine for emulation
+
+    License     GPL-2.0+
+    Copyright   2010-2020 Chris Kennedy, Antonio Giner,
+                         Alexandre Wodarczyk, Gil Delescluse
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 
  **************************************************************/
 
@@ -36,7 +48,11 @@ class resync_handler
 		void handler_thread();
 
 		HWND m_hwnd;
+<<<<<<< HEAD
 		std::thread	my_thread;
+=======
+		std::thread my_thread;
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 		bool m_is_notified_1;
 		bool m_is_notified_2;
 		std::mutex m_mutex;

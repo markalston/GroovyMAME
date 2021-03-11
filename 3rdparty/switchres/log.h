@@ -34,4 +34,8 @@ void set_log_verbose(void *func_ptr);
 void set_log_info(void *func_ptr);
 void set_log_error(void *func_ptr);
 
+<<<<<<< HEAD
 #endif
+=======
+#endif
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809

@@ -20,8 +20,13 @@
 #include "custom_video.h"
 
 // Set timing option flags
+<<<<<<< HEAD
 #define XRANDR_DISABLE_CRTC_RELOCATION	0x00000001
 #define XRANDR_ENABLE_SCREEN_REORDERING	0x00000002
+=======
+#define XRANDR_DISABLE_CRTC_RELOCATION  0x00000001
+#define XRANDR_ENABLE_SCREEN_REORDERING 0x00000002
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 
 // Set timing internal flags
 #define XRANDR_SETMODE_IS_DESKTOP          0x00000001
@@ -31,7 +36,11 @@
 #define XRANDR_SETMODE_UPDATE_REORDERING   0x00000040
 
 #define XRANDR_SETMODE_INFO_MASK           0x0000000F
+<<<<<<< HEAD
 #define XRANDR_SETMODE_UPDATE_MASK	   0x000000F0
+=======
+#define XRANDR_SETMODE_UPDATE_MASK     0x000000F0
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 
 // Super resolution placement, vertical stacking, reserved XRANDR_REORDERING_MAXIMUM_HEIGHT pixels
 //TODO confirm 1024 height is sufficient

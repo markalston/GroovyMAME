@@ -8,7 +8,11 @@
 
    License     GPL-2.0+
    Copyright   2010-2020 Chris Kennedy, Antonio Giner,
+<<<<<<< HEAD
 	                     Alexandre Wodarczyk, Gil Delescluse
+=======
+                         Alexandre Wodarczyk, Gil Delescluse
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 
  **************************************************************/
 
@@ -20,12 +24,20 @@
 #include "monitor.h"
 #include "modeline.h"
 #include "display.h"
+<<<<<<< HEAD
+=======
+#include "edid.h"
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 
 //============================================================
 //  CONSTANTS
 //============================================================
 
+<<<<<<< HEAD
 #define SWITCHRES_VERSION "2.00"
+=======
+#define SWITCHRES_VERSION "2.002"
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 
 //============================================================
 //  TYPE DEFINITIONS
@@ -46,7 +58,11 @@ public:
 
 	// getters
 	display_manager *display() const { return displays[0]; }
+<<<<<<< HEAD
 	display_manager *display(int i) const { return displays[i]; }
+=======
+	display_manager *display(int i) const { return i < (int)displays.size()? displays[i] : nullptr; }
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 
 	// setters (log manager)
 	void set_log_verbose_fn(void *func_ptr);
@@ -55,7 +71,12 @@ public:
 
 	// setters (display manager)
 	void set_monitor(const char *preset) { strncpy(ds.monitor, preset, sizeof(ds.monitor)-1); }
+<<<<<<< HEAD
 	void set_modeline(const char *modeline) { strncpy(ds.modeline, modeline, sizeof(ds.modeline)-1); }
+=======
+	void set_modeline(const char *modeline) { strncpy(ds.user_modeline, modeline, sizeof(ds.user_modeline)-1); }
+	void set_user_mode(modeline *user_mode) { ds.user_mode = *user_mode;}
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 	void set_crt_range(int i, const char *range) { strncpy(ds.crt_range[i], range, sizeof(ds.crt_range[i])-1); }
 	void set_lcd_range(const char *range) { strncpy(ds.lcd_range, range, sizeof(ds.lcd_range)-1); }
 	void set_screen(const char *screen) { strncpy(ds.screen, screen, sizeof(ds.screen)-1); }
@@ -103,4 +124,8 @@ private:
 };
 
 
+<<<<<<< HEAD
 #endif
+=======
+#endif
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809

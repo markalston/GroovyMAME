@@ -159,7 +159,12 @@ void switchres_module::get_game_info(display_manager* display, render_target *ta
 
 	// determine the refresh rate of the primary screen
 	const screen_device *primary_screen = screen_device_enumerator(machine().root_device()).first();
+<<<<<<< HEAD
 	if (primary_screen != nullptr) set_refresh(display->index(), ATTOSECONDS_TO_HZ(primary_screen->refresh_attoseconds()));
+=======
+	if (primary_screen != nullptr) set_refresh(display->index(), primary_screen->frame_number() == 0? ATTOSECONDS_TO_HZ(primary_screen->refresh_attoseconds()) : primary_screen->frame_period().as_hz());
+	//if (primary_screen != nullptr) set_refresh(display->index(), primary_screen->frame_period().as_hz());
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 }
 
 //============================================================
@@ -324,7 +329,14 @@ const char *switchres_module::display_mode_to_txt(int i)
 
 	display_manager *display = switchres().display(i);
 
+<<<<<<< HEAD
 	if (display->got_mode())
+=======
+	if (display == nullptr)
+		sprintf(m_mode_txt, "SR(%d): no physical display\n", i);
+
+	else if (display->got_mode())
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 		sprintf(m_mode_txt, "SR(%d): %d x %d%s%s %2.3f Hz %2.3f kHz\n",
 				i, display->width(), display->height(), display->is_interlaced()?"i":"p", display->is_doublescanned()?"d":"", display->v_freq(), display->h_freq()/1000);
 	else

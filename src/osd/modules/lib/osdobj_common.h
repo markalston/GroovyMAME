@@ -27,6 +27,7 @@
 #include "modules/switchres/switchres_module.h"
 #include "emuopts.h"
 #include "../frontend/mame/ui/menuitem.h"
+#include <list>
 
 //============================================================
 //  Defines

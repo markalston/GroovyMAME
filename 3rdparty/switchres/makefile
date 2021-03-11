@@ -4,7 +4,11 @@ MAIN = switchres_main
 STANDALONE = switchres
 TARGET_LIB = libswitchres
 GRID = grid
+<<<<<<< HEAD
 SRC = monitor.cpp modeline.cpp switchres.cpp display.cpp custom_video.cpp log.cpp switchres_wrapper.cpp
+=======
+SRC = monitor.cpp modeline.cpp switchres.cpp display.cpp custom_video.cpp log.cpp switchres_wrapper.cpp edid.cpp
+>>>>>>> b2e5eb43538de049926f6ee679574b1af9ca2809
 OBJS = $(SRC:.cpp=.o)
 
 CROSS_COMPILE ?=
